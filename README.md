@@ -38,9 +38,9 @@
 ## تصاویر رابط کاربری
 
 - داشبورد پرستار:
-  - ![Nurse Dashboard](screenshots/Screenshot 2025-10-22 132658.png)
+  - ![Nurse Dashboard](screenshots/Screenshot%202025-10-22%20132658.png)
 - صفحه جزئیات بیمار (پرستار) با خلاصه AI و نمودار:
-  - ![Patient Detail](screenshots/Screenshot 2025-10-22 135209.png)
+  - ![Patient Detail](screenshots/Screenshot%202025-10-22%20135209.png)
 
 فایل‌های مرتبط:
 - [main_app/templates/main_app/nurse/nurse_dashboard.html](main_app/templates/main_app/nurse/nurse_dashboard.html)
