@@ -41,7 +41,11 @@
   - ![Nurse Dashboard](screenshots/Screenshot%202025-10-22%20132658.png)
 - صفحه جزئیات بیمار (پرستار) با خلاصه AI و نمودار:
   - ![Patient Detail](screenshots/Screenshot%202025-10-22%20135209.png)
-
+- نمونه خلاصه سازی وضعیت AI:
+  - ![Patient Ai Detail](screenshots/Screenshot%202025-10-22%20144521.png)
+-داشبورد پزشک :
+  - ![Dr](screenshots/Screenshot%202025-10-22%20144628.png)
+  - ![Dr](screenshots/Screenshot%202025-10-22%20150137.png)
 فایل‌های مرتبط:
 - [main_app/templates/main_app/nurse/nurse_dashboard.html](main_app/templates/main_app/nurse/nurse_dashboard.html)
 - [main_app/templates/main_app/nurse/patient_detail.html](main_app/templates/main_app/nurse/patient_detail.html)

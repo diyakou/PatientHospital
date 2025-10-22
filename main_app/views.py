@@ -191,7 +191,6 @@ def patient_detail_nr(request, pk):
 
 # Async endpoint to fetch AI summary after page load
 @login_required
-@nurse_required
 def patient_ai_summary_nr(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
     # Limit records for faster AI prompt creation

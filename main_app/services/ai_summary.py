@@ -30,6 +30,7 @@ logger = logging.getLogger("ai_summary")
 try:
     from g4f.client import Client
     from g4f.cookies import set_cookies_dir, read_cookie_files
+    from g4f.Provider import OpenaiChat
     # در صورت نیاز می‌توانید Provider خاص هم ایمپورت کنید:
     # from g4f.Provider import OpenaiChat
 except Exception:  # pragma: no cover
@@ -198,9 +199,9 @@ def generate_patient_summary(patient, vital_signs: Iterable) -> Tuple[Optional[s
     - اگر در ددلاین پاسخی نیاید، فال‌بک محلی
     """
     # ددلاین‌ها مشابه اسکریپت خبری
-    PER_ATTEMPT_TIMEOUT = 8       # هر تلاش g4f حداکثر 8s
-    OVERALL_DEADLINE   = 15       # سقف کل عملیات 15s
-    MODEL_CANDIDATES   = ["gpt-5", "gpt-4o"]  # اگر 4o در g4f شما نباشد، نادیده گرفته می‌شود
+    PER_ATTEMPT_TIMEOUT = 50       # هر تلاش g4f حداکثر 8s
+    OVERALL_DEADLINE   = 30     # سقف کل عملیات 15s
+    MODEL_CANDIDATES   = ["gpt-5"]  # اگر 4o در g4f شما نباشد، نادیده گرفته می‌شود
 
     logger.info("🔍 شروع تولید خلاصه | بیمار: %s %s",
                 getattr(patient, "first_name", ""), getattr(patient, "last_name", ""))
@@ -235,6 +236,7 @@ def generate_patient_summary(patient, vital_signs: Iterable) -> Tuple[Optional[s
                 messages=messages,
                 temperature=0.2,
                 max_tokens=600,
+                provider=OpenaiChat,
                 # اگر نسخه g4f شما پشتیبانی می‌کند، باز کنید:
                 # timeout=PER_ATTEMPT_TIMEOUT,
                 # request_timeout=PER_ATTEMPT_TIMEOUT,

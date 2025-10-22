@@ -1,0 +1,5 @@
+{"user": null, "model": "gpt-5", "provider": "OpenaiChat", "completion_tokens": 562, "prompt_tokens": 416, "total_tokens": 978}
+{"user": null, "model": "gpt-4o", "provider": "OpenaiChat", "completion_tokens": 476, "prompt_tokens": 416, "total_tokens": 892}
+{"user": null, "model": "gpt-5", "provider": "OpenaiChat", "completion_tokens": 537, "prompt_tokens": 416, "total_tokens": 953}
+{"user": null, "model": "gpt-5", "provider": "OpenaiChat", "completion_tokens": 469, "prompt_tokens": 416, "total_tokens": 885}
+{"user": null, "model": "gpt-4o", "provider": "OpenaiChat", "completion_tokens": 560, "prompt_tokens": 416, "total_tokens": 976}

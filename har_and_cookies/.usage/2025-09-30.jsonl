@@ -1,0 +1,7 @@
+{"user": null, "model": "", "provider": "AnyProvider", "prompt_tokens": 3608, "completion_tokens": 880, "total_tokens": 4488, "prompt_tokens_details": {"cached_tokens": 0}, "words": 2029}
+{"user": null, "model": "openai/gpt-4.1-mini", "provider": "AnyProvider", "completion_tokens": 450, "prompt_tokens": 11656, "total_tokens": 12106, "completion_tokens_details": null, "prompt_tokens_details": null}
+{"user": null, "model": "", "provider": "AnyProvider", "prompt_tokens": 11421, "completion_tokens": 443, "total_tokens": 11864}
+{"user": null, "model": "", "provider": "AnyProvider", "prompt_tokens": 3376, "completion_tokens": 1561, "total_tokens": 4937, "prompt_tokens_details": {"cached_tokens": 0}, "words": 4188}
+{"user": null, "model": "openai/gpt-4.1-mini", "provider": "AnyProvider", "completion_tokens": 852, "prompt_tokens": 3283, "total_tokens": 4135, "completion_tokens_details": null, "prompt_tokens_details": null}
+{"user": null, "model": "openai/gpt-4.1-mini", "provider": "AnyProvider", "completion_tokens": 745, "prompt_tokens": 3252, "total_tokens": 3997, "completion_tokens_details": null, "prompt_tokens_details": null}
+{"user": null, "model": "openai/gpt-4.1-mini", "provider": "AnyProvider", "completion_tokens": 786, "prompt_tokens": 11386, "total_tokens": 12172, "completion_tokens_details": null, "prompt_tokens_details": null}
