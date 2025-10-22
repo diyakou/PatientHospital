@@ -1,0 +1,69 @@
+<!-- templates/main_app/edit_patient.html -->
+{% extends "base_Dr.html" %}
+{% load form_tags %}
+
+{% block title %}ویرایش بیمار{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center">
+  <div class="card w-full max-w-2xl p-6">
+    <h1 class="card-title">ویرایش اطلاعات بیمار</h1>
+
+    {% if form.non_field_errors %}
+      <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 mb-4">
+        {% for err in form.non_field_errors %}<div>{{ err }}</div>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" class="space-y-5">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="{{ form.first_name.id_for_label }}" class="form-label">نام</label>
+          {{ form.first_name|add_class:'form-input' }}
+          {% if form.first_name.errors %}<p class="error-text">{{ form.first_name.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.last_name.id_for_label }}" class="form-label">نام خانوادگی</label>
+          {{ form.last_name|add_class:'form-input' }}
+          {% if form.last_name.errors %}<p class="error-text">{{ form.last_name.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.age.id_for_label }}" class="form-label">سن</label>
+          {{ form.age|add_class:'form-input' }}
+          {% if form.age.errors %}<p class="error-text">{{ form.age.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.reason.id_for_label }}" class="form-label">دلیل بیماری</label>
+          {{ form.reason|add_class:'form-input' }}
+          {% if form.reason.errors %}<p class="error-text">{{ form.reason.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="{{ form.medications.id_for_label }}" class="form-label">داروهای تجویزی</label>
+          {{ form.medications|add_class:'form-input' }}
+          {% if form.medications.errors %}<p class="error-text">{{ form.medications.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="form-label">اورژانسی</label>
+          <div class="flex items-center gap-2">
+            {{ form.emergency|add_class:'h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500' }}
+            <span class="muted">در صورت وضعیت اضطراری، این گزینه را فعال کنید.</span>
+          </div>
+          {% if form.emergency.errors %}<p class="error-text">{{ form.emergency.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button type="submit" class="btn-primary">ثبت تغییرات</button>
+        <a href="{% url 'patient_list' %}" class="link">انصراف و بازگشت</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

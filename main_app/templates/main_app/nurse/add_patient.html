@@ -1,0 +1,108 @@
+{% extends "base_Nurse.html" %}
+{% load form_tags %}
+
+{% block title %}افزودن بیمار{% endblock %}
+
+{% block content %}
+<section class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-lg font-bold">اضافه کردن بیمار</h1>
+    <a href="{% url 'nurse_patient_list' %}" class="text-sm text-blue-700 hover:text-blue-900">بازگشت به لیست بیماران</a>
+  </div>
+
+  <form method="POST" class="space-y-6">
+    {% csrf_token %}
+
+    <!-- Patient info card -->
+    <div class="card p-6 space-y-4">
+      <h2 class="text-base font-semibold">اطلاعات بیمار</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="{{ form.first_name.id_for_label }}" class="text-sm text-gray-600">نام</label>
+          {{ form.first_name|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if form.first_name.errors %}<p class="mt-1 text-xs text-red-600">{{ form.first_name.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.last_name.id_for_label }}" class="text-sm text-gray-600">نام خانوادگی</label>
+          {{ form.last_name|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if form.last_name.errors %}<p class="mt-1 text-xs text-red-600">{{ form.last_name.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.age.id_for_label }}" class="text-sm text-gray-600">سن</label>
+          {{ form.age|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if form.age.errors %}<p class="mt-1 text-xs text-red-600">{{ form.age.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.reason.id_for_label }}" class="text-sm text-gray-600">دلیل بیماری</label>
+          {{ form.reason|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if form.reason.errors %}<p class="mt-1 text-xs text-red-600">{{ form.reason.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="{{ form.medications.id_for_label }}" class="text-sm text-gray-600">داروهای تجویزی</label>
+          {{ form.medications|add_class:"w-full rounded border border-gray-300 px-3 py-2 min-h-[96px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if form.medications.errors %}<p class="mt-1 text-xs text-red-600">{{ form.medications.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="{{ form.emergency.id_for_label }}" class="text-sm text-gray-600">وضعیت اورژانسی</label>
+          <div class="mt-2">
+            {{ form.emergency|add_class:"h-4 w-4 text-red-600 border-gray-300 rounded" }}
+          </div>
+          {% if form.emergency.errors %}<p class="mt-1 text-xs text-red-600">{{ form.emergency.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Vital signs card -->
+    <div class="card p-6 space-y-4">
+      <h2 class="text-base font-semibold">ثبت علائم حیاتی اولیه</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="{{ Vital_signs_form.date.id_for_label }}" class="text-sm text-gray-600">تاریخ</label>
+          {{ Vital_signs_form.date|add_class:"w-full rounded border border-gray-300 px-3 py-2 datepicker focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.date.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.date.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ Vital_signs_form.blood_pressure_systolic.id_for_label }}" class="text-sm text-gray-600">فشار خون سیستولیک</label>
+          {{ Vital_signs_form.blood_pressure_systolic|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.blood_pressure_systolic.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.blood_pressure_systolic.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ Vital_signs_form.blood_pressure_diastolic.id_for_label }}" class="text-sm text-gray-600">فشار خون دیاستولیک</label>
+          {{ Vital_signs_form.blood_pressure_diastolic|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.blood_pressure_diastolic.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.blood_pressure_diastolic.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ Vital_signs_form.heart_rate.id_for_label }}" class="text-sm text-gray-600">ضربان قلب</label>
+          {{ Vital_signs_form.heart_rate|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.heart_rate.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.heart_rate.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ Vital_signs_form.blood_sugar.id_for_label }}" class="text-sm text-gray-600">قند خون</label>
+          {{ Vital_signs_form.blood_sugar|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.blood_sugar.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.blood_sugar.errors.0 }}</p>{% endif %}
+        </div>
+
+        <div>
+          <label for="{{ Vital_signs_form.body_temperature.id_for_label }}" class="text-sm text-gray-600">دمای بدن</label>
+          {{ Vital_signs_form.body_temperature|add_class:"w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }}
+          {% if Vital_signs_form.body_temperature.errors %}<p class="mt-1 text-xs text-red-600">{{ Vital_signs_form.body_temperature.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">ثبت</button>
+      <a href="{% url 'nurse_patient_list' %}" class="text-gray-600 hover:text-gray-800">انصراف</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

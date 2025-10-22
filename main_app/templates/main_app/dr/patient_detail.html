@@ -1,0 +1,158 @@
+{% extends "base_Dr.html" %}
+
+{% block title %}جزئیات بیمار{% endblock %}
+
+{% block content %}
+<section class="space-y-6">
+  <!-- Patient info and quick actions -->
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-lg font-bold">جزئیات بیمار</h1>
+      <div class="flex items-center gap-2">
+        <a href="{% url 'edit_medications' patient.pk %}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded">تجویز دارو</a>
+        <a href="{% url 'export_patient_data' patient.pk %}" class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">خروجی اکسل</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div>
+        <div class="text-sm text-gray-500">نام</div>
+        <div class="mt-1 font-semibold text-gray-900">{{ patient.first_name }} {{ patient.last_name }}</div>
+      </div>
+
+      <div>
+        <div class="text-sm text-gray-500">سن</div>
+        <div class="mt-1 text-gray-900">{{ patient.age }}</div>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-sm text-gray-500">دلیل بیماری</div>
+        <div class="mt-1 text-gray-900">{{ patient.reason }}</div>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-sm text-gray-500">داروهای تجویزی</div>
+        <div class="mt-1 text-gray-900">{{ patient.medications }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vital signs table -->
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold">علائم حیاتی</h2>
+      <span class="text-sm text-gray-500">سوابق: {{ vital_signs|length }}</span>
+    </div>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">تاریخ</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">فشار خون سیستولیک</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">فشار خون دیاستولیک</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">ضربان قلب</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">قند خون</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">دمای بدن</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          {% for vs in vital_signs %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2">{{ vs.date }}</td>
+            <td class="px-4 py-2">{{ vs.blood_pressure_systolic }}</td>
+            <td class="px-4 py-2">{{ vs.blood_pressure_diastolic }}</td>
+            <td class="px-4 py-2">{{ vs.heart_rate }}</td>
+            <td class="px-4 py-2">{{ vs.blood_sugar }}</td>
+            <td class="px-4 py-2">{{ vs.body_temperature }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="px-4 py-4 text-center text-gray-500">داده‌ای ثبت نشده است</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Vital signs chart -->
+  <div class="card p-6">
+    <h2 class="text-lg font-bold mb-4">نمودار روند علائم حیاتی</h2>
+    <canvas id="vitalSignsChart" height="120"></canvas>
+  </div>
+</section>
+
+<!-- Chart data (safe JSON) -->
+{{ dates|json_script:"dates-data" }}
+{{ systolic_bp|json_script:"systolic-data" }}
+{{ diastolic_bp|json_script:"diastolic-data" }}
+{{ heart_rates|json_script:"heart-data" }}
+{{ blood_sugars|json_script:"sugar-data" }}
+{{ body_temperatures|json_script:"temp-data" }}
+
+<!-- Chart script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labelsData = JSON.parse(document.getElementById('dates-data').textContent);
+  const systolicData = JSON.parse(document.getElementById('systolic-data').textContent);
+  const diastolicData = JSON.parse(document.getElementById('diastolic-data').textContent);
+  const heartData = JSON.parse(document.getElementById('heart-data').textContent);
+  const sugarData = JSON.parse(document.getElementById('sugar-data').textContent);
+  const tempData = JSON.parse(document.getElementById('temp-data').textContent);
+
+  const ctx = document.getElementById('vitalSignsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labelsData,
+      datasets: [
+        {
+          label: 'فشار خون سیستولیک',
+          data: systolicData,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'فشار خون دیاستولیک',
+          data: diastolicData,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'ضربان قلب',
+          data: heartData,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'قند خون',
+          data: sugarData,
+          borderColor: 'rgba(153, 102, 255, 1)',
+          backgroundColor: 'rgba(153, 102, 255, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'دمای بدن',
+          data: tempData,
+          borderColor: 'rgba(255, 159, 64, 1)',
+          backgroundColor: 'rgba(255, 159, 64, 0.15)',
+          tension: 0.25
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: {
+        x: { title: { display: true, text: 'تاریخ' } },
+        y: { title: { display: true, text: 'مقدار' }, beginAtZero: false }
+      }
+    }
+  });
+</script>
+{% endblock %}

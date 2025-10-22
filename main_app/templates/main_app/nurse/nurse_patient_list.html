@@ -1,0 +1,29 @@
+{% extends "base_Nurse.html" %}
+
+{% block title %}لیست بیماران{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h2 class="text-2xl font-bold mb-6">لیست بیماران</h2>
+    <table class="min-w-full bg-white rounded shadow-md">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="py-2 px-4 border-b">نام بیمار</th>
+                <th class="py-2 px-4 border-b">عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">{{ patient.first_name }} {{ patient.last_name }}</td>
+                <td class="py-2 px-4 border-b">
+                    <a href="{% url 'patient_detail_nr' patient.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">جزئیات</a>
+                    <a href="{% url 'edit_vital_signs' patient.pk %}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">ویرایش علائم حیاتی</a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

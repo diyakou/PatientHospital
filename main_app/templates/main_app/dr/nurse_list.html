@@ -1,0 +1,46 @@
+<!-- templates/main_app/nurse_list.html -->
+{% extends "base_Dr.html" %}
+
+{% block title %}لیست پرستاران{% endblock %}
+
+{% block content %}
+<section class="space-y-6">
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-lg font-bold">لیست پرستاران</h1>
+      <span class="text-sm text-gray-500">تعداد: {{ nurses|length }}</span>
+    </div>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">نام</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">ایمیل</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">شماره تلفن</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">آدرس</th>
+            <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">عملیات</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          {% for nurse in nurses %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2">{{ nurse.user.first_name }} {{ nurse.user.last_name }}</td>
+            <td class="px-4 py-2">{{ nurse.user.email }}</td>
+            <td class="px-4 py-2">{{ nurse.phone_number }}</td>
+            <td class="px-4 py-2">{{ nurse.address }}</td>
+            <td class="px-4 py-2">
+              <a href="{% url 'nurse_detail' nurse.pk %}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded">مشاهده</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-4 py-4 text-center text-gray-500">پرستاری یافت نشد</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

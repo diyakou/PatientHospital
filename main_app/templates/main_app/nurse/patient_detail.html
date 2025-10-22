@@ -1,0 +1,221 @@
+{% extends "base_Nurse.html" %}
+
+{% block title %}جزئیات بیمار{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h2 class="text-2xl font-bold mb-6">جزئیات بیمار</h2>
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold mb-4">{{ patient.first_name }} {{ patient.last_name }}</h3>
+        <p><strong>دلیل بیماری:</strong> {{ patient.reason }}</p>
+        <p><strong>سن:</strong> {{ patient.age }}</p>
+        <p><strong>داروهای تجویزی:</strong> {{ patient.medications }}</p>
+        <div class="mt-5">
+            <a href="{% url 'edit_vital_signs' patient.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">ویرایش علائم حیاتی</a>
+            <a href="{% url 'export_patient_data' patient.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-6 rounded ml-4">خروجی اکسل</a>
+
+        </div>
+        <!-- AI Physician Assistant Summary (async with loader) -->
+        <div class="mt-6 card p-6">
+            <div class="flex items-center justify-between">
+                <h4 class="text-lg font-bold">خلاصه پزشک‌یار هوش مصنوعی</h4>
+                <span class="text-xs text-gray-500">AI Assistant</span>
+            </div>
+            <div id="ai-summary-status" class="mt-2 text-sm text-gray-600 flex items-center gap-2">
+                <span class="inline-block h-4 w-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></span>
+                <span>در حال تولید خلاصه با پزشک‌یار هوش مصنوعی...</span>
+            </div>
+            <div id="ai-summary-skeleton" class="mt-3 animate-pulse space-y-2">
+                <div class="h-3 bg-gray-200 rounded"></div>
+                <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                <div class="h-3 bg-gray-200 rounded w-4/6"></div>
+            </div>
+            <div id="ai-summary-error" class="mt-2 text-sm text-red-600 hidden"></div>
+            <div id="ai-summary-content" class="mt-3 text-sm leading-7 whitespace-pre-line text-gray-800"></div>
+            <p class="mt-2 text-xs text-gray-500">
+                هشدار و سلب مسئولیت: این متن صرفاً جهت کمک به تیم درمان تولید شده و جایگزین تشخیص یا دستور پزشک نیست.
+            </p>
+        </div>
+        <div class="mt-6">
+            <h4 class="text-lg font-bold mb-2">علائم حیاتی</h4>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2">تاریخ</th>
+                        <th class="py-2">فشار خون سیستولیک</th>
+                        <th class="py-2">فشار خون دیاستولیک</th>
+                        <th class="py-2">ضربان قلب</th>
+                        <th class="py-2">قند خون</th>
+                        <th class="py-2">دمای بدن</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vs in vital_signs %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2">{{ vs.date }}</td>
+                        <td class="py-2">{{ vs.blood_pressure_systolic }}</td>
+                        <td class="py-2">{{ vs.blood_pressure_diastolic }}</td>
+                        <td class="py-2">{{ vs.heart_rate }}</td>
+                        <td class="py-2">{{ vs.blood_sugar }}</td>
+                        <td class="py-2">{{ vs.body_temperature }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <canvas id="vitalSignsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart data (safe JSON) -->
+{{ dates|json_script:"nr-dates-data" }}
+{{ systolic_bp|json_script:"nr-systolic-data" }}
+{{ diastolic_bp|json_script:"nr-diastolic-data" }}
+{{ heart_rates|json_script:"nr-heart-data" }}
+{{ blood_sugars|json_script:"nr-sugar-data" }}
+{{ body_temperatures|json_script:"nr-temp-data" }}
+
+<!-- Chart script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labelsData = JSON.parse(document.getElementById('nr-dates-data').textContent);
+  const systolicData = JSON.parse(document.getElementById('nr-systolic-data').textContent);
+  const diastolicData = JSON.parse(document.getElementById('nr-diastolic-data').textContent);
+  const heartData = JSON.parse(document.getElementById('nr-heart-data').textContent);
+  const sugarData = JSON.parse(document.getElementById('nr-sugar-data').textContent);
+  const tempData = JSON.parse(document.getElementById('nr-temp-data').textContent);
+
+  const ctx = document.getElementById('vitalSignsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labelsData,
+      datasets: [
+        {
+          label: 'فشار خون سیستولیک',
+          data: systolicData,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'فشار خون دیاستولیک',
+          data: diastolicData,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'ضربان قلب',
+          data: heartData,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'قند خون',
+          data: sugarData,
+          borderColor: 'rgba(153, 102, 255, 1)',
+          backgroundColor: 'rgba(153, 102, 255, 0.15)',
+          tension: 0.25
+        },
+        {
+          label: 'دمای بدن',
+          data: tempData,
+          borderColor: 'rgba(255, 159, 64, 1)',
+          backgroundColor: 'rgba(255, 159, 64, 0.15)',
+          tension: 0.25
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: {
+        x: { title: { display: true, text: 'تاریخ' } },
+        y: { title: { display: true, text: 'مقدار' }, beginAtZero: false }
+      }
+    }
+  });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  console.group('AI Assistant Summary');
+  console.time('AI_total');
+
+  const statusEl = document.getElementById('ai-summary-status');
+  const skeletonEl = document.getElementById('ai-summary-skeleton');
+  const contentEl = document.getElementById('ai-summary-content');
+  const errorEl = document.getElementById('ai-summary-error');
+
+  const url = "{% url 'patient_ai_summary_nr' patient.pk %}";
+
+  function setStage(stage, extra) {
+    console.log('AI_STAGE:', stage, extra || '');
+  }
+
+  function finalize() {
+    console.timeEnd('AI_total');
+    console.groupEnd();
+  }
+
+  function renderSummary(summary) {
+    if (contentEl) contentEl.textContent = summary || '';
+    if (statusEl) statusEl.classList.add('hidden');
+    if (skeletonEl) skeletonEl.classList.add('hidden');
+    if (errorEl) errorEl.classList.add('hidden');
+    setStage('RENDERED');
+  }
+
+  function renderError(msg) {
+    if (statusEl) statusEl.classList.add('hidden');
+    if (skeletonEl) skeletonEl.classList.add('hidden');
+    if (errorEl) {
+      errorEl.textContent = msg || 'دریافت خلاصه با خطا مواجه شد.';
+      errorEl.classList.remove('hidden');
+    }
+    setStage('FAILED');
+  }
+
+  async function fetchSummary(attempt = 1) {
+    setStage('REQUEST_SENT', { attempt });
+    try {
+      const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+      setStage('RESPONSE_RECEIVED', { status: resp.status });
+      const data = await resp.json();
+      setStage('JSON_PARSED');
+      if (data.error) {
+        console.warn('AI_WARNING:', data.error);
+      }
+      if (data.summary) {
+        renderSummary(data.summary);
+        finalize();
+      } else {
+        if (attempt < 2) {
+          const delay = 800 * attempt;
+          setStage('RETRY_SCHEDULED', { nextAttempt: attempt + 1, delay });
+          await new Promise(r => setTimeout(r, delay));
+          return fetchSummary(attempt + 1);
+        }
+        renderError('خلاصه در دسترس نیست.');
+        finalize();
+      }
+    } catch (e) {
+      console.error('AI_ERROR:', e);
+      if (attempt < 2) {
+        const delay = 1000 * attempt;
+        setStage('RETRY_SCHEDULED_AFTER_ERROR', { nextAttempt: attempt + 1, delay });
+        await new Promise(r => setTimeout(r, delay));
+        return fetchSummary(attempt + 1);
+      }
+      renderError('دریافت خلاصه با خطا مواجه شد.');
+      finalize();
+    }
+  }
+
+  setStage('INIT');
+  fetchSummary();
+});
+</script>
+{% endblock %}

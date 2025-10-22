@@ -1,0 +1,52 @@
+{% extends "base_Nurse.html" %}
+
+{% block title %}داشبورد پرستار{% endblock %}
+
+{% block content %}
+<section class="space-y-6">
+  <!-- آمار کلیدی و میانبرها -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="card p-5">
+      <div class="text-sm text-gray-500">کل بیماران</div>
+      <div class="mt-1 text-2xl font-extrabold text-gray-900">{{ patients|length }}</div>
+    </div>
+    <div class="card p-5">
+      <div class="text-sm text-gray-500">بیماران اورژانسی</div>
+      <div class="mt-1 text-2xl font-extrabold text-red-600">{{ emergency_patients|length }}</div>
+    </div>
+    <div class="card p-5">
+      <div class="text-sm text-gray-500">میانبرها</div>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <a href="{% url 'nurse_patient_list' %}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded">لیست بیماران</a>
+        <a href="{% url 'add_patient' %}" class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">افزودن بیمار</a>
+        <a href="{% url 'upload_excel' %}" class="text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded">آپلود اکسل</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- بیماران اورژانسی -->
+  <div class="card p-5">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold">بیماران اورژانسی</h2>
+      {% if emergency_patients %}
+        <span class="text-sm text-red-600">تعداد: {{ emergency_patients|length }}</span>
+      {% endif %}
+    </div>
+
+    <div class="mt-4">
+      {% if emergency_patients %}
+        <ul class="divide-y divide-gray-100">
+          {% for patient in emergency_patients %}
+            <li class="py-3 flex items-center justify-between">
+              <span class="text-gray-800">{{ patient.first_name }} {{ patient.last_name }}</span>
+              <a href="{% url 'patient_detail_nr' patient.pk %}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded">نمایش</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500">بیمار اورژانسی وجود ندارد</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base_Dr.html" %}
+
+{% block title %}لیست بیماران{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h2 class="text-2xl font-bold mb-6">لیست بیماران</h2>
+    <table class="min-w-full bg-white rounded-lg shadow-lg">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">نام</th>
+                <th class="py-2 px-4 border-b">نام خانوادگی</th>
+                <th class="py-2 px-4 border-b">عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">{{ patient.first_name }}</td>
+                <td class="py-2 px-4 border-b">{{ patient.last_name }}</td>
+                <td class="py-2 px-4 border-b">
+                    <a href="{% url 'patient_detail' patient.pk %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">مشاهده</a>
+                    <a href="{% url 'edit_medications' patient.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">تجویز دارو</a>
+                    <a href="{% url 'delete_patient' patient.pk %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">حذف</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

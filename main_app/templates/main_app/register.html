@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}ثبت‌نام{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center">
+  <div class="card w-full max-w-xl">
+    <h1 class="card-title">ایجاد حساب کاربری</h1>
+
+    {% if user_form.non_field_errors or nurse_form.non_field_errors or doctor_form.non_field_errors %}
+      <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 mb-4">
+        {% for err in user_form.non_field_errors %}<div>{{ err }}</div>{% endfor %}
+        {% for err in nurse_form.non_field_errors %}<div>{{ err }}</div>{% endfor %}
+        {% for err in doctor_form.non_field_errors %}<div>{{ err }}</div>{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" class="space-y-5">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label for="{{ user_form.username.id_for_label }}" class="form-label">نام کاربری</label>
+          {{ user_form.username|add_class:'form-input' }}
+          {% if user_form.username.errors %}
+            <p class="error-text">{{ user_form.username.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ user_form.first_name.id_for_label }}" class="form-label">نام</label>
+          {{ user_form.first_name|add_class:'form-input' }}
+          {% if user_form.first_name.errors %}
+            <p class="error-text">{{ user_form.first_name.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ user_form.last_name.id_for_label }}" class="form-label">نام خانوادگی</label>
+          {{ user_form.last_name|add_class:'form-input' }}
+          {% if user_form.last_name.errors %}
+            <p class="error-text">{{ user_form.last_name.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <label for="{{ user_form.email.id_for_label }}" class="form-label">ایمیل</label>
+          {{ user_form.email|add_class:'form-input' }}
+          {% if user_form.email.errors %}
+            <p class="error-text">{{ user_form.email.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ user_form.password1.id_for_label }}" class="form-label">رمز عبور</label>
+          {{ user_form.password1|add_class:'form-input' }}
+          {% if user_form.password1.errors %}
+            <p class="error-text">{{ user_form.password1.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ user_form.password2.id_for_label }}" class="form-label">تکرار رمز عبور</label>
+          {{ user_form.password2|add_class:'form-input' }}
+          {% if user_form.password2.errors %}
+            <p class="error-text">{{ user_form.password2.errors.0 }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <label for="role" class="form-label">نقش</label>
+        <select name="role" id="role" class="form-input">
+          <option value="nurse" {% if request.POST.role == 'nurse' %}selected{% endif %}>پرستار</option>
+          <option value="doctor" {% if request.POST.role == 'doctor' %}selected{% endif %}>پزشک</option>
+        </select>
+      </div>
+
+      <div id="nurse-fields" class="space-y-4 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="{{ nurse_form.phone_number.id_for_label }}" class="form-label">شماره تلفن</label>
+            {{ nurse_form.phone_number|add_class:'form-input' }}
+            {% if nurse_form.phone_number.errors %}
+              <p class="error-text">{{ nurse_form.phone_number.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ nurse_form.address.id_for_label }}" class="form-label">آدرس</label>
+            {{ nurse_form.address|add_class:'form-input' }}
+            {% if nurse_form.address.errors %}
+              <p class="error-text">{{ nurse_form.address.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div id="doctor-fields" class="space-y-4 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label for="{{ doctor_form.specialization.id_for_label }}" class="form-label">تخصص</label>
+            {{ doctor_form.specialization|add_class:'form-input' }}
+            {% if doctor_form.specialization.errors %}
+              <p class="error-text">{{ doctor_form.specialization.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ doctor_form.phone_number.id_for_label }}" class="form-label">شماره تلفن</label>
+            {{ doctor_form.phone_number|add_class:'form-input' }}
+            {% if doctor_form.phone_number.errors %}
+              <p class="error-text">{{ doctor_form.phone_number.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ doctor_form.address.id_for_label }}" class="form-label">آدرس</label>
+            {{ doctor_form.address|add_class:'form-input' }}
+            {% if doctor_form.address.errors %}
+              <p class="error-text">{{ doctor_form.address.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">ثبت‌نام</button>
+    </form>
+
+    <p class="mt-4 text-center muted">
+      حساب دارید؟
+      <a href="{% url 'login' %}" class="link">ورود</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const roleSelect = document.getElementById('role');
+    const nurseFields = document.getElementById('nurse-fields');
+    const doctorFields = document.getElementById('doctor-fields');
+
+    function setRoleUI(role) {
+      const showNurse = role === 'nurse';
+      nurseFields.classList.toggle('hidden', !showNurse);
+      doctorFields.classList.toggle('hidden', showNurse);
+
+      nurseFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = !showNurse);
+      doctorFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = showNurse);
+    }
+
+    roleSelect.addEventListener('change', function () {
+      setRoleUI(this.value);
+    });
+
+    setRoleUI(roleSelect.value || 'nurse');
+  });
+</script>
+{% endblock %}

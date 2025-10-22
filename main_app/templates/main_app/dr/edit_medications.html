@@ -1,0 +1,20 @@
+{% extends "base_Dr.html" %}
+
+{% block title %}ویرایش داروهای تجویزی{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h2 class="text-2xl font-bold mb-6">ویرایش داروهای تجویزی</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-4">
+            {{ form.medications.label_tag }}
+            {{ form.medications }}
+            {% if form.medications.errors %}
+            <div class="text-red-600 text-sm">{{ form.medications.errors }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">ثبت</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!-- templates/main_app/Nurse/delete_patient_confirm.html -->
+{% extends "base_Nurse.html" %}
+
+{% block title %}حذف بیمار{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md bg-white p-8 rounded shadow-md mx-auto mt-10">
+    <h2 class="text-2xl font-bold mb-6 text-center">حذف بیمار</h2>
+    <p>آیا مطمئن هستید که می‌خواهید بیمار "{{ patient.name }}" را حذف کنید؟ این عملیات قابل بازگشت نیست.</p>
+    <form method="POST" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="w-full py-2 px-4 bg-red-500 hover:bg-red-700 text-white font-bold rounded">حذف</button>
+        <a href="{% url 'nurse_patient_list' %}" class="w-full block mt-4 text-center py-2 px-4 bg-gray-500 hover:bg-gray-700 text-white font-bold rounded">انصراف</a>
+    </form>
+</div>
+{% endblock %}

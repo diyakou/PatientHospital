@@ -1,0 +1,38 @@
+<!-- templates/main_app/nurse_detail.html -->
+{% extends "base_Dr.html" %}
+
+{% block title %}جزئیات پرستار{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="card w-full max-w-2xl p-6">
+    <h1 class="card-title">جزئیات پرستار</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <div class="text-sm text-gray-500">نام</div>
+        <div class="mt-1 font-semibold text-gray-900">{{ nurse.user.first_name }} {{ nurse.user.last_name }}</div>
+      </div>
+
+      <div>
+        <div class="text-sm text-gray-500">ایمیل</div>
+        <div class="mt-1 text-gray-900">{{ nurse.user.email }}</div>
+      </div>
+
+      <div>
+        <div class="text-sm text-gray-500">شماره تلفن</div>
+        <div class="mt-1 text-gray-900">{{ nurse.phone_number }}</div>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-sm text-gray-500">آدرس</div>
+        <div class="mt-1 text-gray-900">{{ nurse.address }}</div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+      <a href="{% url 'nurse_list' %}" class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded">بازگشت به لیست پرستاران</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
